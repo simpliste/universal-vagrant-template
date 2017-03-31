@@ -11,10 +11,8 @@ Development box template
 
 ### Versions
 
-* CentOS release 6.8 (Final)
-* Nginx 1.10.2
-* PHP 5.6.29
-* MySQL 5.6.33
+See atlas.hashicorp for more information about the box.
+https://atlas.hashicorp.com/ajnijland/boxes/php5-centos-nginx-mysql
 
 ### Instructions
 
