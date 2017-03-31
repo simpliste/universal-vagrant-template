@@ -1,4 +1,4 @@
-Development one shoe assignment
+Development box template
 
 ### Pre-reqs
 
@@ -19,17 +19,15 @@ Development one shoe assignment
 ### Instructions
 
 * `vagrant up`
-* add "dev.oneshoe.com" to your host file with ip 192.168.56.115
-* go to dev.oneshoe.com and see an working version of the api
-* The admin user name to login is "ajnijland" with password "9i*m^fn3QIED4AN&38FktG"
-* The account of the test user to play with permissions is "test" with password "test123456"
+* add "dev.projectname.com" to your host file with ip 192.168.56.75
+* go to dev.projectname.com and see an working version of the api
 * The default user name of the mysql database is "root" with password "password"
 * for more documentation, see the documentation files and the project repository
 
 ### Documentation
 
-The project will be located in /var/www/htdocs/dev.oneshoe.com and is mounted in the vagrant folder in /project.
+The project will be located in /var/www/htdocs/dev.projectname.com and is mounted in the vagrant folder in /project.
 You must always use git from within your development box. The folder on your host machine is actually mounted / shared
 with the host.
 
-During provisioning a database is automatically created in the vagrant box. After provisioning you can go to "dev.oneshoe.com" and you are up and running!
+During provisioning a database is automatically created in the vagrant box. After provisioning you can go to "dev.projectname.com" and you are up and running!
