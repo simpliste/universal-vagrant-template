@@ -3,7 +3,7 @@ config:
   # Documentroot will be /var/www/htdocs/projectname
   # Vhost will be dev.projectname.com and reachable on the private box ip
   project_name: 'projectname'
-  private_box_ip: '192.168.56.75'
+  private_box_ip: '192.168.56.190'
   # git clone $git_repo
   git_repo: '-b master git@github.com:symfony/symfony.git'
   timezone: 'Europe/Amsterdam'
@@ -11,6 +11,7 @@ config:
   cpus: "2"
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://atlas.hashicorp.com/search.
-  vagrant_box: "ajnijland/php5-centos-nginx-mysql"
-  vagrant_box_version: "0.1.0"
-
+  vagrant_box: "ajnijland/centos6-php7-elasticsearch-mysql"
+  vagrant_box_version: "0.2.0"
+  git_config_user_name: "Ard-Jan Nijland"
+  git_config_user_email: "nijland.aj@gmail.com"

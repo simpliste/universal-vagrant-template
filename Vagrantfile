@@ -26,6 +26,7 @@ Vagrant.configure("2") do |config|
   # File must be copied first to user directory because file provisioning does not support sudo
   config.vm.provision :shell, :inline => "echo Copying " + vagrant_config['project_name'] + " vhost file"
   config.vm.provision "file", source: "./templates/dev.projectname.com.conf", destination: "~/dev.projectname.com.conf"
+  # Replace project name with variabele project_name in the vhost file
   config.vm.provision "shell", inline: "sed -i -e 's/projectname/" + vagrant_config['project_name'] + "/g' /home/vagrant/dev.projectname.com.conf"
   config.vm.provision "shell", inline: "sudo mv /home/vagrant/dev.projectname.com.conf /etc/nginx/conf.d/dev." + vagrant_config['project_name'] + ".com.conf"
 
@@ -45,6 +46,9 @@ Vagrant.configure("2") do |config|
   config.vm.provision "file", source: "./templates/hosts", destination: "~/hosts"
   config.vm.provision "shell", inline: "sudo mv /home/vagrant/hosts /etc/hosts"
 
+  # Setup the git user credentials
+  config.vm.provision :shell, :inline => "git config --global user.name \"" + vagrant_config['git_config_user_name'] + "\""
+  config.vm.provision :shell, :inline => "git config --global user.email \"" + vagrant_config['git_config_user_email'] + "\""
 
   # Setup database
   config.vm.provision :shell, :inline => "echo Importing " + vagrant_config['project_name'] + " database and granting permissions to root user"
