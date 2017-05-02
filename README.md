@@ -18,16 +18,15 @@ vagrant_box & vagrant_box_version
 
 ### Instructions
 
+* fill in all the variables in the config file
 * `vagrant up`
-* add "dev.projectname.com" to your host file with the ip address you entered in the config.yml file (private_box_ip)
+* add to the domain you filled in, in the config file to your host file with the ip address you entered in the config.yml file (private_box_ip)
 * go to dev.projectname.com and see an working version of the api
 * The default user name of the mysql database is "root" with password "password"
 * for more documentation, see the documentation of the box on atlas or checkout the repository with the ansible source environment
 
 ### Documentation
 
-The project will be located in /var/www/htdocs/dev.projectname.com and is mounted in the vagrant folder in /project.
+The project will be located in /var/www/htdocs/{domain} <- from your config file and is mounted in the vagrant folder in /project.
 You must always use git from within your development box. The folder on your host machine is actually mounted / shared
 with the host.
-
-During provisioning a database is automatically created in the vagrant box. After provisioning you can go to "dev.projectname.com" and you are up and running!
