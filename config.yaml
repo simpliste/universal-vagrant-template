@@ -1,17 +1,53 @@
 config:
-  # This will be used for the documentroot and the vhost name
-  # Documentroot will be /var/www/htdocs/projectname
-  # Vhost will be dev.projectname.com and reachable on the private box ip
-  project_name: 'projectname'
+  # Every Vagrant development environment requires a box. See: https://atlas.hashicorp.com/search
+  vagrant_box: 'ajnijland/centos6-php7-elasticsearch-mysql'
+  vagrant_box_version: '0.2.0'
   private_box_ip: '192.168.56.190'
-  # git clone $git_repo
-  git_repo: '-b master git@github.com:symfony/symfony.git'
   timezone: 'Europe/Amsterdam'
-  memory: "2048"
-  cpus: "2"
-  # Every Vagrant development environment requires a box. You can search for
-  # boxes at https://atlas.hashicorp.com/search.
-  vagrant_box: "ajnijland/centos6-php7-elasticsearch-mysql"
-  vagrant_box_version: "0.2.0"
-  git_config_user_name: "Ard-Jan Nijland"
-  git_config_user_email: "nijland.aj@gmail.com"
+  memory: '2048'
+  cpus: '2'
+  git_config_user_name: 'Ard-Jan Nijland'
+  git_config_user_email: 'nijland.aj@gmail.com'
+  database_scripts: ['./data/database_import.sql']
+  copy_files: [
+      {
+        file: './templates/hosts',
+        copy_to: '/etc/hosts'
+      },
+      {
+        file: '~/.ssh/id_rsa',
+        copy_to: '/home/vagrant/.ssh/id_rsa'
+      },
+      {
+        file: '~/.ssh/id_rsa.pub',
+        copy_to: '/home/vagrant/.ssh/id_rsa.pub'
+      },
+      {
+        file: './templates/selinux',
+        copy_to: '/etc/selinux/config'
+      }
+    ]
+  projects:
+    - {
+      # The domain name of the site for the vhost
+      domain: 'dev.project.com',
+      # The web directory seen from the project directory
+      web_dir: 'web',
+      # Repository that should be checked out on provisioning
+      git_repo: '-b master git@github.com:silexphp/Silex-Skeleton.git',
+      # Whether or not composer install should be triggered on provisioning
+      composer_install: true,
+      # Directory where composer install must be triggered (seen from the project dir)
+      composer_install_dir: ".",
+      commands: [
+        {
+          #current directory is project directory
+          execute_dir: ".",
+          command: "php bin/console my-command"
+        },
+        {
+          execute_dir: "web",
+          command: 'rm index_*'
+        }
+      ]
+    }
