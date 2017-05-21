@@ -27,6 +27,7 @@ config:
         copy_to: '/etc/selinux/config'
       }
     ]
+    #@todo changes this to the more readable array like the other
   projects:
     - {
       # The domain name of the site for the vhost
@@ -47,7 +48,7 @@ config:
         },
         {
           execute_dir: "web",
-          command: 'rm index_*'
+          command: 'rm -rf index_*'
         }
       ]
     }

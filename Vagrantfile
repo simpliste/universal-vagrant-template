@@ -28,8 +28,8 @@ Vagrant.configure("2") do |config|
   ENV["LC_ALL"] = "en_US.UTF-8"
 
   # Setup the git user credentials
-  config.vm.provision :shell, :inline => "git config --global user.name \"" + vagrant_config['git_config_user_name'] + "\""
-  config.vm.provision :shell, :inline => "git config --global user.email \"" + vagrant_config['git_config_user_email'] + "\""
+  config.vm.provision :shell, privileged: false, :inline => "git config --global user.name \"" + vagrant_config['git_config_user_name'] + "\""
+  config.vm.provision :shell, privileged: false, :inline => "git config --global user.email \"" + vagrant_config['git_config_user_email'] + "\""
 
   # Copy all files specified in the config to the guest
   copy_files.each do |file|
