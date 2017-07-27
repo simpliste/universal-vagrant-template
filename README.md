@@ -1,4 +1,8 @@
-# Development box template
+# Universal vagrant template
+
+## Concept
+The idea is to provide a vagrant template which offers the ability to fully setup a new project(or projects) where no 
+manual configuration has to be done afterwards. Check out the config.yaml to get an idea of what is possible.
 
 ## Pre-reqs
 
