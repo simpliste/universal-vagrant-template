@@ -6,8 +6,8 @@ config:
   timezone: 'Europe/Amsterdam'
   memory: '2048'
   cpus: '2'
-  git_config_user_name: 'Ard-Jan Nijland'
-  git_config_user_email: 'nijland.aj@gmail.com'
+  git_config_user_name: 'Your Name'
+  git_config_user_email: 'info@example.com'
   database_scripts: ['./data/database_import.sql']
   copy_files: [
       {
@@ -27,9 +27,8 @@ config:
         copy_to: '/etc/selinux/config'
       }
     ]
-    #@todo changes this to the more readable array like the other
-  projects:
-    - {
+  projects: [
+    {
       # The domain name of the site for the vhost
       domain: 'dev.project.com',
       # The web directory seen from the project directory
@@ -52,3 +51,4 @@ config:
         }
       ]
     }
+  ]
