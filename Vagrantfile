@@ -56,25 +56,34 @@ Vagrant.configure("2") do |config|
 
   # Do for each project
   projects.each do |project|
+
     # File must be copied first to user directory because file provisioning does not support sudo
     config.vm.provision :shell, :inline => "echo configuring vhost file for " + project['domain']
-    config.vm.provision :file, source: "./templates/domain.conf", destination: "~/domain.conf"
+
+    if vagrant_config['webserver'] == 'nginx'
+        config.vm.provision :file, source: "./templates/domain.nginx.conf", destination: "~/domain.conf"
+    elsif vagrant_config['webserver'] == 'apache'
+        config.vm.provision :file, source: "./templates/domain.apache.conf", destination: "~/domain.conf"
+    end
 
     # Replace project name with variabele project_name in the vhost file
     config.vm.provision :shell, inline: "sed -i -e 's/domain/" + project['domain'] + "/g' /home/vagrant/domain.conf"
     config.vm.provision :shell, inline: "sed -i -e 's/web_dir/" + project['web_dir'] + "/g' /home/vagrant/domain.conf"
 
-    # Move vhost conf file to the correct directory
-    config.vm.provision :shell, inline: "sudo mv /home/vagrant/domain.conf /etc/nginx/conf.d/" + project['domain'] + ".conf"
-    config.vm.provision :shell, inline: "sudo restorecon -v /etc/nginx/conf.d/" + project["domain"] + ".conf"
+    # Move vhost conf file to the correct directory and set selinux settings
+    if vagrant_config['webserver'] == 'nginx'
+        config.vm.provision :shell, inline: "sudo mv /home/vagrant/domain.conf /etc/nginx/conf.d/" + project['domain'] + ".conf"
+        config.vm.provision :shell, inline: "sudo restorecon -v /etc/nginx/conf.d/" + project["domain"] + ".conf"
+    elsif vagrant_config['webserver'] == 'apache'
+        config.vm.provision :shell, inline: "sudo mv /home/vagrant/domain.conf /etc/httpd/conf.d/" + project['domain'] + ".conf"
+        config.vm.provision :shell, inline: "sudo restorecon -v /etc/httpd/conf.d/" + project["domain"] + ".conf"
+    end
 
     # Setup the project
     if Dir['./project/' + project['domain']].empty?
       config.vm.provision :shell, inline: <<-SHELL, privileged: false do |shell|
         echo "Setting up the project directory for domain $2"
-        ssh-keyscan bitbucket.org >> ~/.ssh/known_hosts
-        ssh-keyscan github.com >> ~/.ssh/known_hosts
-        git clone $1 "/var/www/htdocs/$2/"
+        git clone $1 "/var/www/htdocs/$2/" -q
         SHELL
         shell.args = [project['git_repo'], project['domain']]
       end
@@ -105,7 +114,11 @@ Vagrant.configure("2") do |config|
   # The synced folder causes a problem with selinux so for now selinux is disabled
   config.vm.provision :shell, inline: <<-SHELL, privileged: true
     setenforce 0
-    service nginx restart
+    if vagrant_config['webserver'] == 'nginx'
+        service nginx restart
+    elsif vagrant_config['webserver'] == 'apache'
+        service httpd restart
+    end
   SHELL
 
   # Configure database
