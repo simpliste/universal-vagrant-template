@@ -7,6 +7,7 @@ current_dir       = File.dirname(File.expand_path(__FILE__))
 config            = YAML.load_file("#{current_dir}/config.yaml")
 vagrant_config    = config['config']
 projects          = vagrant_config['projects']
+known_hosts       = vagrant_config['known_hosts']
 database_scripts  = vagrant_config['database_scripts']
 copy_files        = vagrant_config['copy_files']
 
@@ -52,6 +53,11 @@ Vagrant.configure("2") do |config|
     config.vm.provision :shell, :inline => "echo Executing database script " + file
     config.vm.provision :file, source: file, destination: "~/database_import.sql"
     config.vm.provision :shell, inline: "mysql < /home/vagrant/database_import.sql"
+  end
+
+  # Add known hosts
+  known_hosts.each do |known_host|
+    config.vm.provision :shell, privileged: false, :inline => "ssh-keyscan " + known_host + ">> ~/.ssh/known_hosts"
   end
 
   # Do for each project
