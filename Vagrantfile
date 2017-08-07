@@ -10,6 +10,7 @@ projects          = vagrant_config['projects']
 known_hosts       = vagrant_config['known_hosts']
 database_scripts  = vagrant_config['database_scripts']
 copy_files        = vagrant_config['copy_files']
+restart_services  = vagrant_config['restart_services']
 
 Vagrant.configure("2") do |config|
   # For a complete vagrant documentation reference see: https://docs.vagrantup.com.
@@ -58,6 +59,11 @@ Vagrant.configure("2") do |config|
   # Add known hosts
   known_hosts.each do |known_host|
     config.vm.provision :shell, privileged: false, :inline => "ssh-keyscan " + known_host + ">> ~/.ssh/known_hosts"
+  end
+
+  # Restart the defined services
+  restart_services.each do |service_name|
+    config.vm.provision :shell, privileged: true, :inline => "service " + service_name + " restart"
   end
 
   # Do for each project
@@ -118,14 +124,12 @@ Vagrant.configure("2") do |config|
   end
 
   # The synced folder causes a problem with selinux so for now selinux is disabled
-  config.vm.provision :shell, inline: <<-SHELL, privileged: true
-    setenforce 0
-    if vagrant_config['webserver'] == 'nginx'
-        service nginx restart
-    elsif vagrant_config['webserver'] == 'apache'
-        service httpd restart
-    end
-  SHELL
+  config.vm.provision :shell, privileged: true, :inline => "setenforce 0"
+  if vagrant_config['webserver'] == 'nginx'
+    config.vm.provision :shell, privileged: true, :inline => "service nginx restart"
+  elsif vagrant_config['webserver'] == 'apache'
+    config.vm.provision :shell, privileged: true, :inline => "service httpd restart"
+  end
 
   # Configure database
   config.vm.provision :shell, :inline => "echo Grant all privileges to root user on all databases"

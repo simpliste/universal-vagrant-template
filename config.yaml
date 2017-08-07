@@ -15,25 +15,28 @@ config:
   known_hosts: [
     'bitbucket.org',
     'github.com'
-  ],
+  ]
+  restart_services: [
+    'elasticsearch'
+  ]
   copy_files: [
-      {
-        file: './templates/hosts',
-        copy_to: '/etc/hosts'
-      },
-      {
-        file: '~/.ssh/id_rsa',
-        copy_to: '/home/vagrant/.ssh/id_rsa'
-      },
-      {
-        file: '~/.ssh/id_rsa.pub',
-        copy_to: '/home/vagrant/.ssh/id_rsa.pub'
-      },
-      {
-        file: './templates/selinux',
-        copy_to: '/etc/selinux/config'
-      }
-    ]
+    {
+      file: './templates/hosts',
+      copy_to: '/etc/hosts'
+    },
+    {
+      file: '~/.ssh/id_rsa',
+      copy_to: '/home/vagrant/.ssh/id_rsa'
+    },
+    {
+      file: '~/.ssh/id_rsa.pub',
+      copy_to: '/home/vagrant/.ssh/id_rsa.pub'
+    },
+    {
+      file: './templates/selinux',
+      copy_to: '/etc/selinux/config'
+    }
+  ]
   projects: [
     {
       # The domain name of the site for the vhost
