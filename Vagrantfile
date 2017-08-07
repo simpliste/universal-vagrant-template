@@ -3,9 +3,18 @@
 
 require 'yaml'
 
+class ::Hash
+  def deep_merge(second)
+    merger = proc { |key, v1, v2| Hash === v1 && Hash === v2 ? v1.merge(v2, &merger) : Array === v1 && Array === v2 ? v1 | v2 : [:undefined, nil, :nil].include?(v2) ? v1 : v2 }
+    self.merge(second.to_h, &merger)
+  end
+end
+
 current_dir       = File.dirname(File.expand_path(__FILE__))
 config            = YAML.load_file("#{current_dir}/config.yaml")
-vagrant_config    = config['config']
+box_config        = YAML.load_file("#{current_dir}/box/config.yaml")
+
+vagrant_config    = box_config['config'].deep_merge(config['config'])
 projects          = vagrant_config['projects']
 known_hosts       = vagrant_config['known_hosts']
 database_scripts  = vagrant_config['database_scripts']
@@ -95,7 +104,7 @@ Vagrant.configure("2") do |config|
     if Dir['./project/' + project['domain']].empty?
       config.vm.provision :shell, inline: <<-SHELL, privileged: false do |shell|
         echo "Setting up the project directory for domain $2"
-        git clone $1 "/var/www/htdocs/$2/" -q
+        git clone $1 "/var/www/htdocs/$2/"
         SHELL
         shell.args = [project['git_repo'], project['domain']]
       end

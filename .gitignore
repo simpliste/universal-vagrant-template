@@ -3,3 +3,6 @@
 .idea/*
 .vagrant/*
 .DS_Store
+/box/templates/*
+/box/*
+!/box/config.yaml.dist
