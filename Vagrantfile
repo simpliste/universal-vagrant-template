@@ -20,6 +20,7 @@ known_hosts       = vagrant_config['known_hosts']
 database_scripts  = vagrant_config['database_scripts']
 copy_files        = vagrant_config['copy_files']
 restart_services  = vagrant_config['restart_services']
+commands          = vagrant_config['commands']
 
 Vagrant.configure("2") do |config|
   # For a complete vagrant documentation reference see: https://docs.vagrantup.com.
@@ -47,6 +48,12 @@ Vagrant.configure("2") do |config|
     config.vm.provision :shell, :inline => "echo Copying file " + file['file'] + " to " + file['copy_to']
     config.vm.provision :file, source: file['file'], destination: "~/file"
     config.vm.provision :shell, inline: "sudo mv /home/vagrant/file " + file['copy_to']
+  end
+
+  # Execute commands in box
+  commands.each do |command|
+    config.vm.provision :shell, privileged: false, :inline => "echo Executing command " + command
+    config.vm.provision :shell, privileged: false, :inline => command
   end
 
   Vagrant.configure("2") do |config|
