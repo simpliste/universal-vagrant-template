@@ -17,20 +17,12 @@ config:
     'github.com'
   ]
   restart_services: [
-    'elasticsearch'
+    'crond'
   ]
   copy_files: [
     {
-      file: '~/.ssh/id_rsa',
-      copy_to: '/home/vagrant/.ssh/id_rsa'
-    },
-    {
-      file: '~/.ssh/id_rsa.pub',
-      copy_to: '/home/vagrant/.ssh/id_rsa.pub'
-    },
-    {
-      file: './templates/selinux',
-      copy_to: '/etc/selinux/config'
+      file: './templates/config.yml.dist',
+      copy_to: '/home/vagrant/config.yml.dist'
     }
   ]
   projects: [
