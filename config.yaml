@@ -11,5 +11,12 @@ config:
     {
       file: './templates/selinux',
       copy_to: '/etc/selinux/config'
+    },
+    {
+      file: './templates/.gitignore',
+      copy_to: '/home/vagrant/.gitignore'
     }
+  ]
+  commands: [
+    'git config --global core.excludesfile ~/.gitignore'
   ]
