@@ -92,6 +92,7 @@ Vagrant.configure("2") do |config|
         config.vm.provision :file, source: "./templates/domain.nginx.conf", destination: "~/domain.conf"
     elsif vagrant_config['webserver'] == 'apache'
         config.vm.provision :file, source: "./templates/domain.apache.conf", destination: "~/domain.conf"
+        config.vm.provision :file, source: "./templates/httpd.conf", destination: "~/httpd.conf"
     end
 
     # Replace project name with variabele project_name in the vhost file
@@ -104,6 +105,7 @@ Vagrant.configure("2") do |config|
         config.vm.provision :shell, inline: "sudo restorecon -v /etc/nginx/conf.d/" + project["domain"] + ".conf"
     elsif vagrant_config['webserver'] == 'apache'
         config.vm.provision :shell, inline: "sudo mv /home/vagrant/domain.conf /etc/httpd/conf.d/" + project['domain'] + ".conf"
+        config.vm.provision :shell, inline: "sudo mv /home/vagrant/httpd.conf /etc/httpd/conf/httpd.conf"
         config.vm.provision :shell, inline: "sudo restorecon -v /etc/httpd/conf.d/" + project["domain"] + ".conf"
     end
 
