@@ -5,3 +5,4 @@
 /box/*
 !/box/config.yaml.dist
 !/box/.gitignore
+!box/README.md

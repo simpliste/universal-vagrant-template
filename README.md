@@ -33,6 +33,18 @@ vagrant_box & vagrant_box_version
 
 The project will be located in /var/www/htdocs/{domain} <- from your config file and is mounted in the vagrant folder in /project.
 
+## How to use this universal vagrant template
+* Checkout this project, i suggest checking out the latest version. <br>
+* `git clone --depth=1 git@github.com:Ard-Jan/universal-vagrant-template-box-example.git`
+* Go to the directory "box" and coppy config.yaml.dist to config.yaml and edit the configuration file to your needs. Now you are ready and you can start the box by running `vagrant up`
+
+## Backup your implementation in Git
+All the files in the directory box/* are excluded in the .gitignore from this template, so you can push your specific implementation in your own git repository for example.
+* Go to the directory 'box'
+* `git init`
+* `git remote add origin {your remote url}`
+* Now you are able to get along with updates of the universal-vagrant-template by just checking out the new version in the box.
+
 ## License
 
 MIT / BSD
