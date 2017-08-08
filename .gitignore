@@ -4,3 +4,4 @@
 /box/templates/*
 /box/*
 !/box/config.yaml.dist
+!/box/.gitignore
