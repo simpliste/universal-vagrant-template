@@ -35,12 +35,22 @@ The project will be located in /var/www/htdocs/{domain} <- from your config file
 
 ## How to use this universal vagrant template
 * Checkout this project, i suggest checking out the latest version. <br>
-* `git clone --depth=1 git@github.com:Ard-Jan/universal-vagrant-template-box-example.git`
+* `git clone --depth=1 git@github.com:Ard-Jan/universal-vagrant-template.git`
 * Go to the directory "box" and coppy config.yaml.dist to config.yaml and edit the configuration file to your needs. The default values in the config.yml.dist file can also be used as an example to see how it works.
 * Now you are ready and you can start the box by running `vagrant up`
 
 You can use all kind of vagrant boxes that are provided on[Vagrant Cloud](https://app.vagrantup.com/boxes/search), the 
 only thing that this template expects is that either nginx or apache is available in the box because it tries to set the vhost.
+
+There also is an box example repository you can try this one by:
+
+* `universal-vagrant-template/box`
+* `git init`
+* `git remote add origin git@github.com:Ard-Jan/universal-vagrant-template-box-example.git`
+* `git pull origin master`
+* `cd ../`
+* add the domain to the hosts file with the ip you entered in the box/config.yml (host file of host machine)
+* `vagrant up`
 
 ## Backup your implementation in Git
 All the files in the directory box/* are excluded in the .gitignore from this template, so you can push your specific implementation in your own git repository for example.
