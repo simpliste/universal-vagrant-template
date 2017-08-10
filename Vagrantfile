@@ -10,17 +10,27 @@ class ::Hash
   end
 end
 
-current_dir       = File.dirname(File.expand_path(__FILE__))
-config            = YAML.load_file("#{current_dir}/config.yaml")
-box_config        = YAML.load_file("#{current_dir}/box/config.yaml")
+current_dir = File.dirname(File.expand_path(__FILE__))
+config      = YAML.load_file("#{current_dir}/config.yaml")
+box_config  = YAML.load_file("#{current_dir}/box/config.yaml")
 
 vagrant_config    = box_config['config'].deep_merge(config['config'])
-projects          = vagrant_config['projects']
-known_hosts       = vagrant_config['known_hosts']
-database_scripts  = vagrant_config['database_scripts']
-copy_files        = vagrant_config['copy_files']
-restart_services  = vagrant_config['restart_services']
-commands          = vagrant_config['commands']
+
+user_config = "#{current_dir}/box/config_user.yaml";
+
+# This is for backwards compatibility with old versions of the dist file
+if File.exists?(user_config)
+  user_config = YAML.load_file(user_config)
+  vagrant_config.deep_merge(user_config['config'])
+end
+
+vagrant_config   = box_config['config'].deep_merge(config['config']).deep_merge(user_config['config'])
+projects         = vagrant_config['projects']
+known_hosts      = vagrant_config['known_hosts']
+database_scripts = vagrant_config['database_scripts']
+copy_files       = vagrant_config['copy_files']
+restart_services = vagrant_config['restart_services']
+commands         = vagrant_config['commands']
 
 Vagrant.configure("2") do |config|
   # For a complete vagrant documentation reference see: https://docs.vagrantup.com.

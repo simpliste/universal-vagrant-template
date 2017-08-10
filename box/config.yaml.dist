@@ -4,12 +4,9 @@ config:
   vagrant_box_version: '0.2.0'
   # Should be either nginx or apache
   webserver: 'nginx'
-  private_box_ip: '192.168.56.190'
   timezone: 'Europe/Amsterdam'
   memory: '2048'
   cpus: '2'
-  git_config_user_name: 'Your Name'
-  git_config_user_email: 'info@example.com'
   database_scripts: ['./data/database_import.sql']
   # The known hosts that should be added to the known hosts file (can be useful for the clone of your git repo)
   known_hosts: [
