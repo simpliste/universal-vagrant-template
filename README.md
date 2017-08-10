@@ -6,8 +6,8 @@ manual configuration has to be done afterwards. Check out the config.yaml to get
 
 ## Pre-reqs
 
-* Vagrant (tested with 1.9.1)
-* Virtual box (tested with 5.1.22)
+* [Vagrant](https://www.vagrantup.com/) (tested with 1.9.1)
+* [Virtual](https://www.virtualbox.org/) box (tested with 5.1.22)
 * Public and private key on your host machine which are added to your bitbucket account. (these keys are automatically
   added to the vagrant box)
 * When 'vagrant up' is failing, it is possible that you need the vb box guest plugin
