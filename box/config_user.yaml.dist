@@ -2,5 +2,3 @@ config:
   git_config_user_name: 'Your Name'
   git_config_user_email: 'info@example.com'
   private_box_ip: '192.168.56.190'
-  memory: '2048'
-  cpus: '2'
