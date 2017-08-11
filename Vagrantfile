@@ -14,7 +14,7 @@ if not File.exists?(user_config)
 end
 
 if not File.exists?(box_config)
-  puts "The file #{box_config} does not exist, it is needed for provisioning. Check the readme file for more information about the setup of this project."
+  puts "The file #{box_config} does not exist, it is needed for provisioning. Check the readme file for more information about the setup of this project.".red
 end
 
 if not File.exists?(user_config) or not File.exists?(box_config)
