@@ -2,44 +2,8 @@
 # vi: set ft=ruby :
 
 require 'yaml'
-
-class ::Hash
-  def deep_merge(second)
-    merger = proc { |key, v1, v2| Hash === v1 && Hash === v2 ? v1.merge(v2, &merger) : Array === v1 && Array === v2 ? v1 | v2 : [:undefined, nil, :nil].include?(v2) ? v1 : v2 }
-    self.merge(second.to_h, &merger)
-  end
-end
-
-class String
-  # colorization
-  def colorize(color_code)
-    "\e[#{color_code}m#{self}\e[0m"
-  end
-
-  def red
-    colorize(31)
-  end
-
-  def green
-    colorize(32)
-  end
-
-  def yellow
-    colorize(33)
-  end
-
-  def blue
-    colorize(34)
-  end
-
-  def pink
-    colorize(35)
-  end
-
-  def light_blue
-    colorize(36)
-  end
-end
+require './src/colorize.rb'
+require './src/hash.rb'
 
 current_dir = File.dirname(File.expand_path(__FILE__))
 user_config = "#{current_dir}/box/config_user.yaml";
