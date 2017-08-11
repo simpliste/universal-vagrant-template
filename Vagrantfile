@@ -46,6 +46,7 @@ Vagrant.configure("2") do |config|
   config.vm.box = vagrant_config['vagrant_box']
   config.vm.box_version = vagrant_config['vagrant_box_version']
   config.vm.network "private_network", ip: vagrant_config['private_box_ip']
+  config.vm.box_check_update = true
   #make sure the correct timezone is set
   config.vm.provision :shell, :inline => "sudo rm /etc/localtime && sudo ln -s /usr/share/zoneinfo/" + vagrant_config['timezone'] + " /etc/localtime", run: "always"
 
