@@ -59,6 +59,7 @@ There is also an example implementation repository which you can checkout. If yo
 * `git pull origin master`
 * `cp config_user.yaml.dist config_user.yaml`
 * `cd ../`
+* `export VAGRANT_DEFAULT_PROVIDER = "virtualbox"`
 * `vagrant up`
 *  add dev.project.com to the hosts file with the ip 192.168.56.190 (host file of host machine)
 
