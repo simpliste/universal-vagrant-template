@@ -10,13 +10,58 @@ class ::Hash
   end
 end
 
+class String
+  # colorization
+  def colorize(color_code)
+    "\e[#{color_code}m#{self}\e[0m"
+  end
+
+  def red
+    colorize(31)
+  end
+
+  def green
+    colorize(32)
+  end
+
+  def yellow
+    colorize(33)
+  end
+
+  def blue
+    colorize(34)
+  end
+
+  def pink
+    colorize(35)
+  end
+
+  def light_blue
+    colorize(36)
+  end
+end
+
 current_dir = File.dirname(File.expand_path(__FILE__))
+user_config = "#{current_dir}/box/config_user.yaml";
+box_config = "#{current_dir}/box/config.yaml"
+
+if not File.exists?(user_config)
+  puts "The file #{user_config} does not exist, it is needed for provisioning. Check the readme file for more information about the setup of this project.".red
+end
+
+if not File.exists?(box_config)
+  puts "The file #{box_config} does not exist, it is needed for provisioning. Check the readme file for more information about the setup of this project."
+end
+
+if not File.exists?(user_config) or not File.exists?(box_config)
+  exit
+end
+
 config      = YAML.load_file("#{current_dir}/config.yaml")
-box_config  = YAML.load_file("#{current_dir}/box/config.yaml")
+box_config  = YAML.load_file(box_config)
 
 vagrant_config    = box_config['config'].deep_merge(config['config'])
 
-user_config = "#{current_dir}/box/config_user.yaml";
 
 # This is for backwards compatibility with old versions of the dist file
 if File.exists?(user_config)
