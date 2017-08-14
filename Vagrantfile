@@ -4,6 +4,7 @@
 require 'yaml'
 require './src/colorize.rb'
 require './src/hash.rb'
+require './src/file.rb'
 
 current_dir = File.dirname(File.expand_path(__FILE__))
 user_config = "#{current_dir}/box/config_user.yaml";
@@ -65,9 +66,7 @@ Vagrant.configure("2") do |config|
 
   # Copy all files specified in the config to the guest
   copy_files.each do |file|
-    config.vm.provision :shell, :inline => "echo Copying file " + file['file'] + " to " + file['copy_to']
-    config.vm.provision :file, source: file['file'], destination: "~/file"
-    config.vm.provision :shell, inline: "sudo mv /home/vagrant/file " + file['copy_to']
+    File.copy_to(config, file['file'], file['copy_to']);
   end
 
   # Execute commands in box
@@ -78,8 +77,10 @@ Vagrant.configure("2") do |config|
 
   Vagrant.configure("2") do |config|
     # forward ssh keys to box
-    config.ssh.private_key_path = "~/.ssh/id_rsa"
+    config.ssh.private_key_path = config['ssh_private_key_path']
     config.ssh.forward_agent = true
+    file.copy_to(config, config['ssh_private_key_path'], '~/.ssh/id_rsa')
+    file.copy_to(config, config['ssh_public_key_path'], '~/.ssh/id_rsa.pub')
   end
 
   # If the project directory not exists on the host machine, create it
