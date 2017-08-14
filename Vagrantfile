@@ -5,6 +5,7 @@ require 'yaml'
 require './src/colorize.rb'
 require './src/hash.rb'
 require './src/file.rb'
+require './src/project.rb'
 
 current_dir = File.dirname(File.expand_path(__FILE__))
 user_config = "#{current_dir}/box/config_user.yaml";
@@ -26,7 +27,6 @@ config      = YAML.load_file("#{current_dir}/config.yaml")
 box_config  = YAML.load_file(box_config)
 
 vagrant_config    = box_config['config'].deep_merge(config['config'])
-
 
 # This is for backwards compatibility with old versions of the dist file
 if File.exists?(user_config)
@@ -105,61 +105,7 @@ Vagrant.configure("2") do |config|
 
   # Do for each project
   projects.each do |project|
-
-    # File must be copied first to user directory because file provisioning does not support sudo
-    config.vm.provision :shell, :inline => "echo configuring vhost file for " + project['domain']
-
-    if vagrant_config['webserver'] == 'nginx'
-        config.vm.provision :file, source: "./templates/domain.nginx.conf", destination: "~/domain.conf"
-    elsif vagrant_config['webserver'] == 'apache'
-        config.vm.provision :file, source: "./templates/domain.apache.conf", destination: "~/domain.conf"
-        config.vm.provision :file, source: "./templates/httpd.conf", destination: "~/httpd.conf"
-    end
-
-    # Replace project name with variabele project_name in the vhost file
-    config.vm.provision :shell, inline: "sed -i -e 's/domain/" + project['domain'] + "/g' /home/vagrant/domain.conf"
-    config.vm.provision :shell, inline: "sed -i -e 's/web_dir/" + project['web_dir'] + "/g' /home/vagrant/domain.conf"
-
-    # Move vhost conf file to the correct directory and set selinux settings
-    if vagrant_config['webserver'] == 'nginx'
-        config.vm.provision :shell, inline: "sudo mv /home/vagrant/domain.conf /etc/nginx/conf.d/" + project['domain'] + ".conf"
-        config.vm.provision :shell, inline: "sudo restorecon -v /etc/nginx/conf.d/" + project["domain"] + ".conf"
-    elsif vagrant_config['webserver'] == 'apache'
-        config.vm.provision :shell, inline: "sudo mv /home/vagrant/domain.conf /etc/httpd/conf.d/" + project['domain'] + ".conf"
-        config.vm.provision :shell, inline: "sudo mv /home/vagrant/httpd.conf /etc/httpd/conf/httpd.conf"
-        config.vm.provision :shell, inline: "sudo restorecon -v /etc/httpd/conf.d/" + project["domain"] + ".conf"
-    end
-
-    # Setup the project
-    if Dir['./project/' + project['domain']].empty?
-      config.vm.provision :shell, inline: <<-SHELL, privileged: false do |shell|
-        echo "Setting up the project directory for domain $2"
-        git clone $1 "/var/www/htdocs/$2/"
-        SHELL
-        shell.args = [project['git_repo'], project['domain']]
-      end
-    end
-
-    if project['composer_install']
-      config.vm.provision :shell, inline: <<-SHELL, privileged: false do |shell|
-        cd "/var/www/htdocs/$1/$2"
-        composer install
-        SHELL
-        shell.args = [project['domain'], project['composer_install_dir']]
-      end
-    end
-
-    # Execute all the commands that belong to the project
-    commands = project['commands']
-    commands.each do |command|
-      config.vm.provision :shell, inline: <<-SHELL, privileged: false do |shell|
-          echo "Executing command $2 for project with domain $3 in directory /var/www/htdocs/$3/$1"
-          cd "/var/www/htdocs/$3/$1"
-          $2
-        SHELL
-        shell.args = [command['execute_dir'], command['command'], project['domain']]
-      end
-    end
+    Project.setup(config, project, vagrant_config['webserver'])
   end
 
   # The synced folder causes a problem with selinux so for now selinux is disabled

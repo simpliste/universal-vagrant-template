@@ -7,4 +7,9 @@ class File
     config.vm.provision :file, source: from, destination: "~/file"
     config.vm.provision :shell, inline: "sudo mv /home/vagrant/file " + to
   end
+
+  # Replace a specific value in a file
+  def self.replace(config, file, search, replace)
+    config.vm.provision :shell, inline: "sed -i -e 's/" + search + "/" + replace + "/g' " + file
+  end
 end
