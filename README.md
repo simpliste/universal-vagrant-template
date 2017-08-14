@@ -15,7 +15,7 @@ manual configuration has to be done afterwards. Check out the config.yaml to get
 
 ## How to use?
 
-* `git clone --depth=1 git@github.com:Ard-Jan/universal-vagrant-template.git`
+* `git clone --depth=1 git@github.com:visymo/universal-vagrant-template.git`
 * `cd universal-vagrant-template`
 * `cp box/config.yaml.dist box/config.yaml`
 * `cp box/config_user.yaml.dist box/config_user.yaml`
@@ -55,7 +55,7 @@ vagrant_box & vagrant_box_version
 There is also an example implementation repository which you can checkout. If you already did some things in the box directory, first undo these changes.
 * `cd box`
 * `git init`
-* `git remote add origin git@github.com:Ard-Jan/universal-vagrant-template-box-example.git`
+* `git remote add origin git@github.com:visymo/universal-vagrant-template-box-example.git`
 * `git pull origin master`
 * `cp config_user.yaml.dist config_user.yaml`
 * `cd ../`
