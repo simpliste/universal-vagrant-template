@@ -53,7 +53,7 @@ vagrant_box & vagrant_box_version
 
 ## Example implementation
 There is also an example implementation repository which you can checkout. If you already did some things in the box directory, first undo these changes.
-* `box`
+* `cd box`
 * `git init`
 * `git remote add origin git@github.com:Ard-Jan/universal-vagrant-template-box-example.git`
 * `git pull origin master`
