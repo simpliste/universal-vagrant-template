@@ -6,35 +6,11 @@ require './src/colorize.rb'
 require './src/hash.rb'
 require './src/file.rb'
 require './src/project.rb'
+require './src/config.rb'
 
 current_dir = File.dirname(File.expand_path(__FILE__))
-user_config = "#{current_dir}/box/config_user.yaml";
-box_config = "#{current_dir}/box/config.yaml"
 
-if not File.exists?(user_config)
-  puts "The file #{user_config} does not exist, it is needed for provisioning. Check the readme file for more information about the setup of this project.".red
-end
-
-if not File.exists?(box_config)
-  puts "The file #{box_config} does not exist, it is needed for provisioning. Check the readme file for more information about the setup of this project.".red
-end
-
-if not File.exists?(user_config) or not File.exists?(box_config)
-  exit
-end
-
-config      = YAML.load_file("#{current_dir}/config.yaml")
-box_config  = YAML.load_file(box_config)
-
-vagrant_config    = box_config['config'].deep_merge(config['config'])
-
-# This is for backwards compatibility with old versions of the dist file
-if File.exists?(user_config)
-  user_config = YAML.load_file(user_config)
-  vagrant_config.deep_merge(user_config['config'])
-end
-
-vagrant_config   = box_config['config'].deep_merge(config['config']).deep_merge(user_config['config'])
+vagrant_config = Config.build("#{current_dir}/config.yaml", "#{current_dir}/box/config.yaml", "#{current_dir}/box/config_user.yaml")
 projects         = vagrant_config['projects']
 known_hosts      = vagrant_config['known_hosts']
 database_scripts = vagrant_config['database_scripts']
@@ -51,10 +27,9 @@ Vagrant.configure("2") do |config|
   #make sure the correct timezone is set
   config.vm.provision :shell, :inline => "sudo rm /etc/localtime && sudo ln -s /usr/share/zoneinfo/" + vagrant_config['timezone'] + " /etc/localtime", run: "always"
 
+  # Set the correct amount of memory and cpus
   config.vm.provider "virtualbox" do |vb|
-    # Customize the amount of memory on the VM:
     vb.memory = vagrant_config['memory']
-    # Customize the amount of cpu's on the VM
     vb.cpus = vagrant_config['cpus']
   end
 
