@@ -41,7 +41,8 @@ Vagrant.configure("2") do |config|
 
   # Copy all files specified in the config to the guest
   copy_files.each do |file|
-    File.copy_to(config, file['file'], file['copy_to']);
+    File.remove(config, file['copy_to'])
+    File.copy_to(config, file['file'], file['copy_to'])
   end
 
   # Execute commands in box
@@ -91,7 +92,7 @@ Vagrant.configure("2") do |config|
   end
 
   # The synced folder causes a problem with selinux so for now selinux is disabled
-  config.vm.provision :shell, privileged: true, :inline => "setenforce 0"
+  config.vm.provision :shell, privileged: true, :inline => "setenforce 0 || true"
   if vagrant_config['webserver'] == 'nginx'
     config.vm.provision :shell, privileged: true, :inline => "service nginx restart"
   elsif vagrant_config['webserver'] == 'apache'
