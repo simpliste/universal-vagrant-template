@@ -63,8 +63,11 @@ Vagrant.configure("2") do |config|
     File.copy_to(config, '~/.ssh/id_rsa', '/home/vagrant/.ssh/id_rsa')
     config.vm.provision :shell, :inline => "echo "+ deprecation_message_key.red
   else
-    File.copy_to(config, vagrant_config['ssh_public_key_path'], '/home/vagrant/.ssh/id_rsa')
+    File.copy_to(config, vagrant_config['ssh_private_key_path'], '/home/vagrant/.ssh/id_rsa')
   end
+
+  # Make sure the ssh keys have the right access rights
+  config.vm.provision :shell, privileged: true, :inline => "chmod 600 /home/vagrant/.ssh/id_rsa /home/vagrant/.ssh/id_rsa.pub"
 
   # If the project directory not exists on the host machine, create it
   directory_name = "./project/"
