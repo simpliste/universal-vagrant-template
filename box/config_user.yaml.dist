@@ -2,3 +2,5 @@ config:
   git_config_user_name: 'Your Name'
   git_config_user_email: 'info@example.com'
   private_box_ip: '192.168.56.190'
+  ssh_private_key_path: '~/.ssh/id_rsa'
+  ssh_public_key_path: '~/.ssh/id_rsa.pub'

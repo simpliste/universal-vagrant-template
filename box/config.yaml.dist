@@ -7,8 +7,6 @@ config:
   timezone: 'Europe/Amsterdam'
   memory: '2048'
   cpus: '2'
-  ssh_private_key_path: '~/.ssh/id_rsa'
-  ssh_public_key_path: '~/.ssh/id_rsa.pub'
   database_scripts: ['./data/database_import.sql']
   # The known hosts that should be added to the known hosts file (can be useful for the clone of your git repo)
   known_hosts: [

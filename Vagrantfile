@@ -50,12 +50,19 @@ Vagrant.configure("2") do |config|
     config.vm.provision :shell, privileged: false, :inline => command
   end
 
-  Vagrant.configure("2") do |config|
-    # forward ssh keys to box
-    config.ssh.private_key_path = config['ssh_private_key_path']
-    config.ssh.forward_agent = true
-    file.copy_to(config, config['ssh_private_key_path'], '~/.ssh/id_rsa')
-    file.copy_to(config, config['ssh_public_key_path'], '~/.ssh/id_rsa.pub')
+  deprecation_message_key = "Using default ssh key path is deprecated, add the public key path to your config_user".red
+  if vagrant_config['ssh_public_key_path'].nil?
+    File.copy_to(config, '~/.ssh/id_rsa.pub', '/home/vagrant/.ssh/id_rsa.pub')
+    config.vm.provision :shell, :inline => "echo "+ deprecation_message_key.red
+  else
+    File.copy_to(config, vagrant_config['ssh_public_key_path'], '/home/vagrant/.ssh/id_rsa.pub')
+  end
+
+  if vagrant_config['ssh_private_key_path'].nil?
+    File.copy_to(config, '~/.ssh/id_rsa', '/home/vagrant/.ssh/id_rsa')
+    config.vm.provision :shell, :inline => "echo "+ deprecation_message_key.red
+  else
+    File.copy_to(config, vagrant_config['ssh_public_key_path'], '/home/vagrant/.ssh/id_rsa')
   end
 
   # If the project directory not exists on the host machine, create it
