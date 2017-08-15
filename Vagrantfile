@@ -105,5 +105,11 @@ Vagrant.configure("2") do |config|
 
   # Configure synced folders
   config.vm.synced_folder '.', '/vagrant', disabled: true
-  config.vm.synced_folder './project', '/var/www/htdocs/'
+
+  if vagrant_config['synced_folder_type'].nil?
+    config.vm.synced_folder './project', '/var/www/htdocs/'
+  else
+    config.vm.synced_folder './project', '/var/www/htdocs/', type: vagrant_config['synced_folder_type']
+  end
+
 end
