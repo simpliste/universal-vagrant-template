@@ -7,9 +7,8 @@ class Project
     File.copy_to(config, './templates/domain.nginx.conf', '/etc/nginx/conf.d/' + domain + '.conf')
 
     # Replace project name with variabele project_name in the vhost file
-    config.vm.provision :shell, inline: "sed -i -e 's/domain/" + domain + "/g' /etc/nginx/conf.d/" + domain + ".conf"
-    config.vm.provision :shell, inline: "sed -i -e 's/web_dir/" + web_dir + "/g' /etc/nginx/conf.d/" + domain + ".conf"
-
+    File.replace(config, 'domain', domain, '/etc/nginx/conf.d/' + domain + '.conf')
+    File.replace(config, 'web_dir', web_dir, '/etc/nginx/conf.d/' + domain + '.conf')
     config.vm.provision :shell, inline: "sudo restorecon -v /etc/nginx/conf.d/" + domain + ".conf"
   end
 

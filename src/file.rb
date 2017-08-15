@@ -9,7 +9,7 @@ class File
   end
 
   # Replace a specific value in a file
-  def self.replace(config, file, search, replace)
+  def self.replace(config, search, replace, file)
     config.vm.provision :shell, inline: "sed -i -e 's/" + search + "/" + replace + "/g' " + file
   end
 end
