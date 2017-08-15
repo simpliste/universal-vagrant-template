@@ -12,4 +12,10 @@ class File
   def self.replace(config, search, replace, file)
     config.vm.provision :shell, inline: "sed -i -e 's/" + search + "/" + replace + "/g' " + file
   end
+
+  # Remove a file or folder from the box
+  def self.remove(config, path)
+    config.vm.provision :shell, privileged: true, :inline => "echo Removing data " + path + " from box before copying syncing"
+    config.vm.provision :shell, privileged: true, :inline => "rm -rf " + path
+  end
 end

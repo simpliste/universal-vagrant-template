@@ -1,14 +1,6 @@
 config:
   copy_files: [
     {
-      file: '~/.ssh/id_rsa',
-      copy_to: '/home/vagrant/.ssh/id_rsa'
-    },
-    {
-      file: '~/.ssh/id_rsa.pub',
-      copy_to: '/home/vagrant/.ssh/id_rsa.pub'
-    },
-    {
       file: './templates/selinux',
       copy_to: '/etc/selinux/config'
     },
