@@ -46,4 +46,14 @@ config:
         }
       ]
     }
+    # These variables are added in an .env file in the project directory
+    environment_variables_file: {
+      APP_DEBUG: 'true'
+    },
+    # These variables are added to the web server config
+    environment_variables_web_server: {
+      DB_HOST: '127.0.0.1',
+      DB_USER: 'mysql',
+      DB_PASSWORD: 'password'
+    }
   ]

@@ -10,6 +10,7 @@ class Project
     File.replace(config, 'domain', domain, '/etc/nginx/conf.d/' + domain + '.conf')
     File.replace(config, 'web_dir', web_dir, '/etc/nginx/conf.d/' + domain + '.conf')
     config.vm.provision :shell, inline: "sudo restorecon -v /etc/nginx/conf.d/" + domain + ".conf"
+    config.vm.provision :shell, inline: "touch /etc/nginx/fastcgi_params_" + domain, privileged: true
   end
 
 
@@ -62,11 +63,40 @@ class Project
   def self.execute_command(config, commands, domain)
     commands.each do |command|
       config.vm.provision :shell, inline: <<-SHELL, privileged: false do |shell|
-          echo "Executing command $2 for project with domain $3 in directory /var/www/htdocs/$3/$1"
-          cd "/var/www/htdocs/$3/$1"
-          $2
+        echo "Executing command $2 for project with domain $3 in directory /var/www/htdocs/$3/$1"
+        cd "/var/www/htdocs/$3/$1"
+        $2
         SHELL
         shell.args = [command['execute_dir'], command['command'], domain]
+      end
+    end
+  end
+
+
+  def self.create_vhost_environment_variables(config, variables, domain, webserver)
+    config.vm.provision :shell, inline: 'echo "Adding variables to the vhost configuration"'
+    variables.each do |variable, value|
+      config.vm.provision :shell, inline: <<-SHELL, privileged: true do |shell|
+        echo "$4"
+        if [ "$4" == "apache" ]; then
+          sudo sed -i 's/<\/VirtualHost>/SetEnv $1 $2\n<\/VirtualHost>/' /etc/httpd/conf.d/$3.conf
+        elif [ "$4" == "nginx" ]; then
+          sudo bash -c \"echo 'fastcgi_param $1 $2;' >> /etc/nginx/fastcgi_params_$3\"
+        fi
+        SHELL
+        shell.args = [variable, value, domain, webserver]
+      end
+    end
+  end
+
+
+  def self.create_project_environment_variables(config, variables, domain)
+    config.vm.provision :shell, inline: 'echo "Creating .env file for the project"'
+    variables.each do |variable, value|
+      config.vm.provision :shell, inline: <<-SHELL, privileged: false do |shell|
+        echo $1=$2 >> /var/www/htdocs/$3/.env
+        SHELL
+        shell.args = [variable, value, domain]
       end
     end
   end
@@ -82,5 +112,8 @@ class Project
     end
 
     self.execute_command(config, project['commands'], project['domain'])
+
+    self.create_vhost_environment_variables(config, project['environment_variables_web_server'], project['domain'], webserver)
+    self.create_project_environment_variables(config, project['environment_variables_file'], project['domain'])
   end
 end
