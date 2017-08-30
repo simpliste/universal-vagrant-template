@@ -75,9 +75,8 @@ class Project
 
   def self.create_vhost_environment_variables(config, variables, domain, webserver)
     config.vm.provision :shell, inline: 'echo "Adding variables to the vhost configuration"'
-    variables.each do |variable, value|
+    (variables || []).each do |variable, value|
       config.vm.provision :shell, inline: <<-SHELL, privileged: true do |shell|
-        echo "$4"
         if [ "$4" == "apache" ]; then
           sudo sed -i 's/<\/VirtualHost>/SetEnv $1 $2\n<\/VirtualHost>/' /etc/httpd/conf.d/$3.conf
         elif [ "$4" == "nginx" ]; then
@@ -92,7 +91,7 @@ class Project
 
   def self.create_project_environment_variables(config, variables, domain)
     config.vm.provision :shell, inline: 'echo "Creating .env file for the project"'
-    variables.each do |variable, value|
+    (variables || []).each do |variable, value|
       config.vm.provision :shell, inline: <<-SHELL, privileged: false do |shell|
         echo $1=$2 >> /var/www/htdocs/$3/.env
         SHELL
