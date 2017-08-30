@@ -77,7 +77,6 @@ class Project
     config.vm.provision :shell, inline: 'echo "Adding variables to the vhost configuration"'
     variables.each do |variable, value|
       config.vm.provision :shell, inline: <<-SHELL, privileged: true do |shell|
-        echo "$4"
         if [ "$4" == "apache" ]; then
           sudo sed -i 's/<\/VirtualHost>/SetEnv $1 $2\n<\/VirtualHost>/' /etc/httpd/conf.d/$3.conf
         elif [ "$4" == "nginx" ]; then
