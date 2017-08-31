@@ -4,30 +4,30 @@ class Project
   def self.setup_nginx_vhost(config, domain, web_dir)
     config.vm.provision :file, source: "./templates/domain.nginx.conf", destination: "~/domain.conf"
 
-    File.copy_to(config, './templates/domain.nginx.conf', '/etc/nginx/conf.d/' + domain + '.conf')
+    File.copy_to(config, './templates/domain.nginx.conf', "/etc/nginx/conf.d/#{domain}.conf")
 
     # Replace project name with variabele project_name in the vhost file
-    File.replace(config, 'domain', domain, '/etc/nginx/conf.d/' + domain + '.conf')
-    File.replace(config, 'web_dir', web_dir, '/etc/nginx/conf.d/' + domain + '.conf')
-    config.vm.provision :shell, inline: "sudo restorecon -v /etc/nginx/conf.d/" + domain + ".conf"
-    config.vm.provision :shell, inline: "touch /etc/nginx/fastcgi_params_" + domain, privileged: true
+    File.replace(config, 'domain', domain, "/etc/nginx/conf.d/#{domain}.conf")
+    File.replace(config, 'web_dir', web_dir, "/etc/nginx/conf.d/#{domain}.conf")
+    config.vm.provision :shell, inline: "sudo restorecon -v /etc/nginx/conf.d/#{domain}.conf"
+    config.vm.provision :shell, inline: "touch /etc/nginx/fastcgi_params_#{domain}", privileged: true
   end
 
 
   def self.setup_apache_vhost(config, domain, web_dir)
-    File.copy_to(config, './templates/domain.apache.conf', '/etc/httpd/conf.d/' + domain + '.conf')
+    File.copy_to(config, './templates/domain.apache.conf', "/etc/httpd/conf.d/#{domain}.conf")
     File.copy_to(config, './templates/httpd.conf', '/etc/httpd/conf/httpd.conf')
 
     # Replace project name with variabele project_name in the vhost file
-    File.replace(config, 'domain', domain, '/etc/httpd/conf.d/' + domain + '.conf')
-    File.replace(config, 'web_dir', web_dir, '/etc/httpd/conf.d/' + domain + '.conf')
+    File.replace(config, 'domain', domain, "/etc/httpd/conf.d/#{domain}.conf")
+    File.replace(config, 'web_dir', web_dir, "/etc/httpd/conf.d/#{domain}.conf")
 
-    config.vm.provision :shell, inline: "sudo restorecon -v /etc/httpd/conf.d/" + domain + ".conf"
+    config.vm.provision :shell, inline: "sudo restorecon -v /etc/httpd/conf.d/#{domain}.conf"
   end
 
 
   def self.setup_vhost(config, domain, web_dir, webserver)
-    config.vm.provision :shell, :inline => "echo configuring vhost file for " + domain
+    config.vm.provision :shell, :inline => "echo configuring vhost file for #{domain}"
 
     if (webserver == 'apache')
       self.setup_apache_vhost(config, domain, web_dir)
@@ -39,7 +39,7 @@ class Project
 
 
   def self.clone_repo(config, repo, folder_name)
-    if Dir['./project/' + folder_name].empty?
+    if Dir["./project/#{folder_name}"].empty?
       config.vm.provision :shell, inline: <<-SHELL, privileged: false do |shell|
         echo "Setting up the project directory for domain $2"
         git clone $1 "/var/www/htdocs/$2/"
@@ -61,7 +61,7 @@ class Project
 
 
   def self.execute_command(config, commands, domain)
-    commands.each do |command|
+    (commands || []).each do |command|
       config.vm.provision :shell, inline: <<-SHELL, privileged: false do |shell|
         echo "Executing command $2 for project with domain $3 in directory /var/www/htdocs/$3/$1"
         cd "/var/www/htdocs/$3/$1"
@@ -78,7 +78,7 @@ class Project
     (variables || []).each do |variable, value|
       config.vm.provision :shell, inline: <<-SHELL, privileged: true do |shell|
         if [ "$4" == "apache" ]; then
-          sudo sed -i 's/<\/VirtualHost>/SetEnv $1 $2\n<\/VirtualHost>/' /etc/httpd/conf.d/$3.conf
+          sudo sed -i "s|</VirtualHost>|SetEnv $1 $2\\n</VirtualHost>|" /etc/httpd/conf.d/$3.conf
         elif [ "$4" == "nginx" ]; then
           sudo bash -c \"echo 'fastcgi_param $1 $2;' >> /etc/nginx/fastcgi_params_$3\"
         fi
