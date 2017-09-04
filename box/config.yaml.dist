@@ -7,7 +7,7 @@ config:
   timezone: 'Europe/Amsterdam'
   memory: '2048'
   cpus: '2'
-  database_scripts: ['./data/database_import.sql']
+  database_scripts: ['./box/data/database_import.sql']
   # The known hosts that should be added to the known hosts file (can be useful for the clone of your git repo)
   known_hosts: [
     'bitbucket.org',
@@ -18,7 +18,7 @@ config:
   ]
   copy_files: [
     {
-      file: './templates/config.yml.dist',
+      file: './box/templates/config.yml.dist',
       copy_to: '/home/vagrant/config.yml.dist'
     }
   ]
@@ -45,15 +45,15 @@ config:
           command: 'rm -rf index_*'
         }
       ]
-    }
-    # These variables are added in an .env file in the project directory
-    environment_variables_file: {
-      APP_DEBUG: 'true'
-    },
-    # These variables are added to the web server config
-    environment_variables_web_server: {
-      DB_HOST: '127.0.0.1',
-      DB_USER: 'mysql',
-      DB_PASSWORD: 'password'
+      # These variables are added in an .env file in the project directory
+      environment_variables_file: {
+        APP_DEBUG: 'true'
+      },
+      # These variables are added to the web server config
+      environment_variables_web_server: {
+        DB_HOST: '127.0.0.1',
+        DB_USER: 'mysql',
+        DB_PASSWORD: 'password'
+      }
     }
   ]
