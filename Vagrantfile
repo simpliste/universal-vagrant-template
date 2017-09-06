@@ -26,6 +26,7 @@ Vagrant.configure("2") do |config|
   config.vm.box_check_update = true
   #make sure the correct timezone is set
   config.vm.provision :shell, :inline => "sudo rm /etc/localtime && sudo ln -s /usr/share/zoneinfo/" + vagrant_config['timezone'] + " /etc/localtime", run: "always"
+  config.vm.provision :shell, privileged: true, :inline => "sed -i 's|date.timezone.*|date.timezone = " + vagrant_config['timezone'] + "|' /etc/php.ini"
 
   # Set the correct amount of memory and cpus
   config.vm.provider "virtualbox" do |vb|
