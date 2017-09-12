@@ -46,6 +46,9 @@ Vagrant.configure("2") do |config|
     File.copy_to(config, file['file'], file['copy_to'])
   end
 
+  # Make sure that the correct Xdebug remote host is set (this is needed when using Xdebug in combination with php cli)
+  File.replace(config, 'xdebug.remote_host=.*', 'xdebug.remote_host=10.0.2.2', '/etc/php.d/*xdebug.ini');
+
   # Execute commands in box
   commands.each do |command|
     config.vm.provision :shell, privileged: false, :inline => "echo Executing command " + command
