@@ -26,6 +26,7 @@ Vagrant.configure("2") do |config|
   config.vm.box_check_update = true
   #make sure the correct timezone is set
   config.vm.provision :shell, :inline => "sudo rm /etc/localtime && sudo ln -s /usr/share/zoneinfo/" + vagrant_config['timezone'] + " /etc/localtime", run: "always"
+  config.vm.provision :shell, privileged: true, :inline => "sed -i 's|date.timezone.*|date.timezone = " + vagrant_config['timezone'] + "|' /etc/php.ini"
 
   # Set the correct amount of memory and cpus
   config.vm.provider "virtualbox" do |vb|
@@ -44,6 +45,9 @@ Vagrant.configure("2") do |config|
     File.remove(config, file['copy_to'])
     File.copy_to(config, file['file'], file['copy_to'])
   end
+
+  # Make sure that the correct Xdebug remote host is set (this is needed when using Xdebug in combination with php cli)
+  File.replace(config, 'xdebug.remote_host=.*', 'xdebug.remote_host=10.0.2.2', '/etc/php.d/*xdebug.ini');
 
   # Execute commands in box
   commands.each do |command|
