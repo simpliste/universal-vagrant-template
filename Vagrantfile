@@ -116,7 +116,7 @@ Vagrant.configure("2") do |config|
   if vagrant_config['synced_folder_type'].nil?
     config.vm.synced_folder './project', '/var/www/htdocs/'
   else
-    config.vm.synced_folder './project', '/var/www/htdocs/', type: vagrant_config['synced_folder_type']
+    config.vm.synced_folder './project', '/var/www/htdocs/', type: vagrant_config['synced_folder_type'], smb_username: vagrant_config['smb_username'], mount_options: vagrant_config['mount_options']
   end
 
 end

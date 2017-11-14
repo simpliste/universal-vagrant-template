@@ -7,6 +7,8 @@ config:
   timezone: 'Europe/Amsterdam'
   memory: '2048'
   cpus: '2'
+  smb_username: null
+  mount_options: []
   database_scripts: ['./box/data/database_import.sql']
   # The known hosts that should be added to the known hosts file (can be useful for the clone of your git repo)
   known_hosts: [

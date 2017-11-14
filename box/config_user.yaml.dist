@@ -4,5 +4,18 @@ config:
   private_box_ip: '192.168.56.190'
   ssh_private_key_path: '~/.ssh/id_rsa'
   ssh_public_key_path: '~/.ssh/id_rsa.pub'
+
   # Set the synced folder type, when empty vagrant will choose (https://www.vagrantup.com/docs/synced-folders/nfs.html)
-  synced_folder_type: ''
+  # Shared folder configurations, choose either 1 the two! Without choosing 1 of the two the default virtualbox shared folders will be used.
+  # OS X & Linux
+  # synced_folder_type: 'nfs'
+
+  # Windows
+  # Symlinks do not work out of the box with samba on windows so when using windows the mount_options can be used to fix this
+  # synced_folder_type: 'smb'
+  # mount_options: ['mfsymlinks', 'dir_mode=0755', 'file_mode=0755']
+  # commands: [
+  #  "sudo yum -y install samba-client samba-common cifs-utils"
+  # ]
+  # smb_username: "Your username"
+
