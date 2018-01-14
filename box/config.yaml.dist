@@ -9,7 +9,7 @@ config:
   cpus: '2'
   smb_username: null
   mount_options: []
-  database_scripts: ['./box/data/database_import.sql']
+  database_scripts: []
   # The known hosts that should be added to the known hosts file (can be useful for the clone of your git repo)
   known_hosts: [
     'bitbucket.org',
@@ -20,7 +20,7 @@ config:
   ]
   copy_files: [
     {
-      file: './box/templates/config.yml.dist',
+      file: './box/config.yaml.dist',
       copy_to: '/home/vagrant/config.yml.dist'
     }
   ]
@@ -46,7 +46,7 @@ config:
           execute_dir: "web",
           command: 'rm -rf index_*'
         }
-      ]
+      ],
       # These variables are added in an .env file in the project directory
       environment_variables_file: {
         APP_DEBUG: 'true'
