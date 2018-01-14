@@ -19,7 +19,7 @@ manual configuration has to be done afterwards. Check out the config.yaml to get
 * `cd universal-vagrant-template`
 * `cp box/config.yaml.dist box/config.yaml`
 * `cp box/config_user.yaml.dist box/config_user.yaml`
-* `export VAGRANT_DEFAULT_PROVIDER = "virtualbox"`
+* `export VAGRANT_DEFAULT_PROVIDER="virtualbox"`
 * `vagrant up`
 *  add dev.project.com to the hosts file with the ip 192.168.56.190 (host file of host machine)
 
