@@ -47,7 +47,8 @@ config:
       ],
       # These variables are added in an .env file in the project directory
       environment_variables_file: {
-        APP_DEBUG: 'true'
+        APP_DEBUG: 'true',
+        APP_SOMETHING: ~
       },
       # These variables are added to the web server config
       environment_variables_web_server: {
