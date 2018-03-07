@@ -49,6 +49,10 @@ Vagrant.configure("2") do |config|
   # Make sure that the correct Xdebug remote host is set (this is needed when using Xdebug in combination with php cli)
   File.replace(config, 'xdebug.remote_host=.*', 'xdebug.remote_host=10.0.2.2', '/etc/php.d/*xdebug.ini');
 
+  # Set the /tmp path as session dir and wsdl cache dir @todo this logic should not be needed, needs to moved to provisioning script
+  File.replace(config, 'php_value session.save_path.*', 'php_value session.save_path    "/tmp"', '/etc/httpd/conf.d/php.conf');
+  File.replace(config, 'php_value session.wsdl_cache_dir.*', 'php_value soap.wsdl_cache_dir  "/tmp"', '/etc/httpd/conf.d/php.conf');
+
   # Execute commands in box
   commands.each do |command|
     config.vm.provision :shell, privileged: false, :inline => "echo Executing command " + command
