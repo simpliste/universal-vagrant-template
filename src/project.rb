@@ -16,7 +16,10 @@ class Project
 
   def self.setup_apache_vhost(config, domain, web_dir)
     File.copy_to(config, './templates/domain.apache.conf', "/etc/httpd/conf.d/#{domain}.conf")
-    File.copy_to(config, './templates/httpd.conf', '/etc/httpd/conf/httpd.conf')
+    # Set the vagrant user and group for apache instead of copying the whole file
+    File.replace(config, 'User apache', 'User vagrant', '/etc/httpd/conf/httpd.conf');
+    File.replace(config, 'Group apache', 'User vagrant', '/etc/httpd/conf/httpd.conf');
+    File.replace(config, '#ServerName www.example.com:80', 'ServerName localhost', '/etc/httpd/conf/httpd.conf');
 
     # Replace project name with variabele project_name in the vhost file
     File.replace(config, 'domain', domain, "/etc/httpd/conf.d/#{domain}.conf")
