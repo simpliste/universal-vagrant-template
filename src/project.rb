@@ -94,10 +94,10 @@ class Project
 
     config.vm.provision :shell, inline: "rm -f /var/www/htdocs/$3/.env"
     (variables || []).each do |variable, value|
-      config.vm.provision :shell, inline: <<-SHELL, privileged: false do |shell|
-        echo $1=$2 >> /var/www/htdocs/$3/.env
-        SHELL
-        shell.args = [variable, value, domain]
+      if value.nil?
+        config.vm.provision :shell, inline: "echo #{variable} >> /var/www/htdocs/#{domain}/.env"
+      else
+        config.vm.provision :shell, inline: "echo #{variable}=#{value} >> /var/www/htdocs/#{domain}/.env"
       end
     end
   end
