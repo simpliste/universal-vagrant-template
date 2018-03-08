@@ -111,13 +111,13 @@ class Project
     self.setup_vhost(config, project['domain'], project['web_dir'], webserver)
     self.clone_repo(config, project['git_repo'], project['domain'])
 
+    self.create_vhost_environment_variables(config, project['environment_variables_web_server'], project['domain'], webserver)
+    self.create_project_environment_variables(config, project['environment_variables_file'], project['domain'])
+
     if project['composer_install']
       self.composer_install(config, project['domain'], project['composer_install_dir'])
     end
 
     self.execute_command(config, project['commands'], project['domain'])
-
-    self.create_vhost_environment_variables(config, project['environment_variables_web_server'], project['domain'], webserver)
-    self.create_project_environment_variables(config, project['environment_variables_file'], project['domain'])
   end
 end
