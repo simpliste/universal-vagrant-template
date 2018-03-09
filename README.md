@@ -15,7 +15,7 @@ manual configuration has to be done afterwards. Check out the config.yaml to get
 
 ## How to use?
 
-* `git clone --depth=1 git@github.com:Ard-Jan/universal-vagrant-template.git`
+* `git clone https://github.com/Ard-Jan/universal-vagrant-template.git`
 * `cd universal-vagrant-template`
 * `cp box/config.yaml.dist box/config.yaml`
 * `cp box/config_user.yaml.dist box/config_user.yaml`
