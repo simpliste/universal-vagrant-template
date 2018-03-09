@@ -15,6 +15,7 @@ projects         = vagrant_config['projects']
 known_hosts      = vagrant_config['known_hosts']
 database_scripts = vagrant_config['database_scripts']
 copy_files       = vagrant_config['copy_files']
+replacements     = vagrant_config['replacements']
 restart_services = vagrant_config['restart_services']
 commands         = vagrant_config['commands']
 
@@ -52,6 +53,10 @@ Vagrant.configure("2") do |config|
   # Set the /tmp path as session dir and wsdl cache dir @todo this logic should not be needed, needs to moved to provisioning script
   File.replace(config, 'session.save_path.*', 'session.save_path    "\/tmp"', '/etc/httpd/conf.d/php.conf');
   File.replace(config, 'session.wsdl_cache_dir.*', 'soap.wsdl_cache_dir  "\/tmp"', '/etc/httpd/conf.d/php.conf');
+
+  replacements.each do |replacement|
+    File.replace(config, replacement['search'], replacement['replace'], replacement['file']);
+  end
 
   # Execute commands in box
   commands.each do |command|

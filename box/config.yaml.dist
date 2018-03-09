@@ -22,6 +22,7 @@ config:
       copy_to: '/home/vagrant/config.yml.dist'
     }
   ]
+  replacements: []
   projects: [
     {
       # The domain name of the site for the vhost

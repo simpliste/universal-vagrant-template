@@ -12,3 +12,4 @@ config:
   commands: [
     'git config --global core.excludesfile ~/.gitignore'
   ]
+  replacements: []
