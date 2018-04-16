@@ -95,7 +95,7 @@ class Project
   def self.create_project_environment_variables(config, variables, domain)
     config.vm.provision :shell, inline: 'echo "First removing .env file if exists and then creating new .env file for the project"'
 
-    config.vm.provision :shell, inline: "rm -f /var/www/htdocs/$3/.env"
+    config.vm.provision :shell, inline: "rm -f /var/www/htdocs/#{domain}/.env"
     (variables || []).each do |variable, value|
       if value.nil?
         config.vm.provision :shell, inline: "echo #{variable} >> /var/www/htdocs/#{domain}/.env"
