@@ -119,5 +119,11 @@ class Project
     end
 
     self.execute_command(config, project['commands'], project['domain'])
+
+    # Copy all files specified in the config to the guest
+    (project['copy_files'] || []).each do |file|
+      File.remove(config, file['copy_to'])
+      File.copy_to(config, file['file'], file['copy_to'])
+    end
   end
 end

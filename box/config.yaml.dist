@@ -46,6 +46,12 @@ config:
           command: 'rm -rf index_*'
         }
       ],
+      copy_files: [
+        {
+          file: './box/config.yaml.dist',
+          copy_to: '/home/vagrant/config.yml.dist'
+        }
+      ],
       # These variables are added in an .env file in the project directory
       environment_variables_file: {
         APP_DEBUG: 'true',
