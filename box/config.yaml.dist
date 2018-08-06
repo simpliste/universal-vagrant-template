@@ -2,6 +2,7 @@ config:
   # Every Vagrant development environment requires a box. See: https://atlas.hashicorp.com/search
   vagrant_box: 'ajnijland/centos6-php7-elasticsearch-mysql'
   vagrant_box_version: '0.2.0'
+  private_box_ip: '192.168.56.190'
   # Should be either nginx or apache
   webserver: 'nginx'
   timezone: 'Europe/Amsterdam'

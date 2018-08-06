@@ -1,9 +1,11 @@
 config:
   git_config_user_name: 'Your Name'
   git_config_user_email: 'info@example.com'
-  private_box_ip: '192.168.56.190'
   ssh_private_key_path: '~/.ssh/id_rsa'
   ssh_public_key_path: '~/.ssh/id_rsa.pub'
+
+  # It is possible to set a custom ip address, but advise is to use the address that is defined in the box
+  # private_box_ip: '192.168.56.190'
 
   # Set the synced folder type, when empty vagrant will choose (https://www.vagrantup.com/docs/synced-folders/nfs.html)
   # Shared folder configurations, choose either 1 the two! Without choosing 1 of the two the default virtualbox shared folders will be used.
