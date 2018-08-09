@@ -111,6 +111,7 @@ Vagrant.configure("2") do |config|
   config.vm.provision :shell, privileged: true, :inline => "setenforce 0 || true"
   if vagrant_config['webserver'] == 'nginx'
     config.vm.provision :shell, privileged: true, :inline => "service nginx restart"
+    config.vm.provision :shell, privileged: true, :inline => "service php-fpm restart"
   elsif vagrant_config['webserver'] == 'apache'
     config.vm.provision :shell, privileged: true, :inline => "service httpd restart"
   end
