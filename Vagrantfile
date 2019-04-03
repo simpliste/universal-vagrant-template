@@ -81,6 +81,7 @@ Vagrant.configure("2") do |config|
 
   # Make sure the ssh keys have the right access rights
   config.vm.provision :shell, privileged: true, :inline => "chmod 600 /home/vagrant/.ssh/id_rsa /home/vagrant/.ssh/id_rsa.pub"
+  config.ssh.forward_agent = true
 
   # If the project directory not exists on the host machine, create it
   directory_name = "./project/"
