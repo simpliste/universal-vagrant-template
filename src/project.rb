@@ -56,7 +56,7 @@ class Project
   def self.composer_install(config, project_dir, composer_install_dir)
     config.vm.provision :shell, inline: <<-SHELL, privileged: false do |shell|
       cd "/var/www/htdocs/$1/$2"
-      composer install
+      composer install -n
       SHELL
       shell.args = [project_dir, composer_install_dir]
     end
