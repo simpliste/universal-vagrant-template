@@ -2,11 +2,11 @@
 # vi: set ft=ruby :
 
 require 'yaml'
-require './src/colorize.rb'
-require './src/hash.rb'
-require './src/file.rb'
-require './src/project.rb'
-require './src/config.rb'
+require_relative 'src/colorize.rb'
+require_relative 'src/hash.rb'
+require_relative 'src/file.rb'
+require_relative 'src/project.rb'
+require_relative 'src/config.rb'
 
 current_dir = File.dirname(File.expand_path(__FILE__))
 
