@@ -112,7 +112,9 @@ class Project
     self.clone_repo(config, project['git_repo'], project['domain'])
 
     self.create_vhost_environment_variables(config, project['environment_variables_web_server'], project['domain'], webserver)
-    self.create_project_environment_variables(config, project['environment_variables_file'], project['domain'])
+    if project.key?('environment_variables_file')
+      self.create_project_environment_variables(config, project['environment_variables_file'], project['domain'])
+    end
 
     if project['composer_install']
       self.composer_install(config, project['domain'], project['composer_install_dir'])
